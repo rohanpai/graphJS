@@ -1,96 +1,93 @@
-var graph = {
-  force: null,
-  links: null,
-  link: null,
-  nodes: null,
-  node: null,
-  svg: null,
+var graph = function () {
+  //
+  // private
+  //
+  var _force = null;
+  var _links = null;
+  var _link = null;
+  var _nodes = null;
+  var _node = null;
+  var _svg = null;
+  var _fill = null;
 
-
-  init: function(){
-    var width = 960,
-    height = 500;
-    var link,  node;
-
-    var fill = d3.scale.category20();
-
-
-    var that = this;
-
-    this.tick = function(){
-      that.link.attr("x1", function(d) { return d.source.x; })
+  var _tick = function(){
+      _link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
-
-      that.node.attr("cx", function(d) { return d.x; })
+      _node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
-    }
+  };
 
+  var _restart = function(){
+    _link = _link.data(_links);
 
-    this.force = d3.layout.force()
-       .size([width, height])
-       .nodes([{}]) // initialize with a single node
-       .linkDistance(30)
-       .charge(-60)
-       .on("tick", this.tick);
-
-    this.svg = d3.select("body").append("svg")
-       .attr("width", width)
-       .attr("height", height)
-       .attr("id", "graph");
-
-    this.svg.append("rect")
-       .attr("width", width)
-       .attr("height", height);
-
-    this.nodes = this.force.nodes();
-    this.links = this.force.links();
-    this.node = this.svg.selectAll(".node");
-    this.link = this.svg.selectAll(".link");
-
-  },
-
-  createNode: function(xVal, yVal){
-   var node = {x: xVal, y: yVal};
-   this.nodes.push(node);
-
-   this.restart();
-  },
-
-  createEdge: function(nodeSource, nodeTarget){
-    this.links.push({source: nodeSource, target: nodeTarget});
-    this.restart();
-  },
-
-  restart: function(){
-    this.link = this.link.data(this.links);
-
-    this.link.enter().insert("line", ".node")
+    _link.enter().insert("line", ".node")
         .attr("class", "link");
 
-    this.node = this.node.data(this.nodes);
+    _node = _node.data(_nodes);
 
-    this.node.enter().insert("circle", ".cursor")
+    _node.enter().insert("circle", ".cursor")
        .attr("class", "node")
        .attr("r", 5);
-    this.force.start();
-  },
-/*
-  tick: function(){
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+    _force.start();
+  };
 
-    this.node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
-  },
-*/
-  randomNumber: function(min, max){
-    return Math.random() * (max - min) + min;
-  }
+    return {
+      //
+      //public
+      //
 
-}
-// this:
-graph.init();
+      width: 0,
+
+      height: 0,
+
+      create: function (width, height) {
+        if(!width) width = 960;
+        if(!height) height = 500;
+        this.width = width; this.height = height;
+
+        _fill = d3.scale.category20();
+        _force = d3.layout.force()
+          .size([width, height])
+          .nodes([{}]) // initialize with a single node
+          .linkDistance(30)
+          .charge(-60)
+          .on("tick", _tick);
+    
+        _svg = d3.select("body").append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("id", "graph");
+    
+        _svg.append("rect")
+          .attr("width", width)
+          .attr("height", height);
+    
+        _nodes = _force.nodes();
+        _links = _force.links();
+        _node = _svg.selectAll(".node");
+        _link = _svg.selectAll(".link");
+
+        _restart();
+      },
+
+      createNode: function(xPos, yPos) {
+        if(!xPos) xPos = this.height/2;
+        if(!yPos) yPos = this.height/2;
+
+        _nodes.push({x: xPos, y: yPos});
+        _restart();
+      },
+
+      createEdge: function(nodeSource, nodeTarget) {
+        if(!nodeSource || !nodeTarget) return;
+        _links.push({source: nodeSource, target: nodeTarget});
+        _restart();
+      }
+
+    };
+ 
+}()
+
+graph.create(300,400);
