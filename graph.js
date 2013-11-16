@@ -72,6 +72,11 @@ var graph = function () {
         _restart();
       },
 
+      createGraphFromJson: function(json){
+        d3.json(json);
+        _restart();
+      },
+
       createNode: function(xPos, yPos) {
         if(!xPos) xPos = this.height/2;
         if(!yPos) yPos = this.height/2;
@@ -90,4 +95,4 @@ var graph = function () {
  
 }()
 
-graph.create(300,400);
+graph.create(400 ,600);
