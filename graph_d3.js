@@ -30,17 +30,23 @@ var cursor = svg.append("circle")
     .attr("r", 30)
     .attr("transform", "translate(-100,-100)")
     .attr("class", "cursor");
-
 restart();
 
 function mousemove() {
   cursor.attr("transform", "translate(" + d3.mouse(this) + ")");
 }
 
+function createNode(){
+  var node = {x: 10, y: 10};
+  var n = nodes.push(node);
+  restart();
+}
+
+
 function mousedown() {
-  var point = d3.mouse(this),
-      node = {x: point[0], y: point[1]},
-      n = nodes.push(node);
+  var point = d3.mouse(this);
+  var node = {x: point[0], y: point[1]};
+  var n = nodes.push(node);
 
   // add links to any nearby nodes
   nodes.forEach(function(target) {
@@ -67,6 +73,7 @@ function tick() {
 }
 
 function restart() {
+  debugger;
   console.log("In restart");
   link = link.data(links);
 

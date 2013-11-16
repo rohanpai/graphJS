@@ -14,7 +14,19 @@ var graph = {
 
     var fill = d3.scale.category20();
 
+
     var that = this;
+
+    this.tick = function(){
+      that.link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+      that.node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+    }
+
 
     this.force = d3.layout.force()
        .size([width, height])
@@ -32,13 +44,10 @@ var graph = {
        .attr("width", width)
        .attr("height", height);
 
-    this.nodes = this.force.nodes(),
-    this.links = this.force.links(),
-    this.node = this.svg.selectAll(".node"),
+    this.nodes = this.force.nodes();
+    this.links = this.force.links();
+    this.node = this.svg.selectAll(".node");
     this.link = this.svg.selectAll(".link");
-
-    node = this.node;
-    link = this.link;
 
   },
 
@@ -50,7 +59,8 @@ var graph = {
   },
 
   createEdge: function(nodeSource, nodeTarget){
-    this.links.push({source: node, target: target});
+    this.links.push({source: nodeSource, target: nodeTarget});
+    this.restart();
   },
 
   restart: function(){
@@ -63,14 +73,12 @@ var graph = {
 
     this.node.enter().insert("circle", ".cursor")
        .attr("class", "node")
-       .attr("r", 5)
-       .call(this.force.drag);
-
+       .attr("r", 5);
     this.force.start();
   },
-
+/*
   tick: function(){
-    this.link.attr("x1", function(d) { return d.source.x; })
+    link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
@@ -78,7 +86,7 @@ var graph = {
     this.node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
   },
-
+*/
   randomNumber: function(min, max){
     return Math.random() * (max - min) + min;
   }
