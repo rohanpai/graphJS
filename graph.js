@@ -72,8 +72,12 @@ var graph = function () {
         _restart();
       },
 
+      getNode: function(nodeIndex){
+        return _nodes[nodeIndex];
+      },
+
       createGraphFromJson: function(json){
-        
+
         _force = null;
         _force = d3.layout.force()
           .size([this.width, this.height])
@@ -105,7 +109,7 @@ var graph = function () {
         _links.push({source: nodeSource, target: nodeTarget});
         _restart();
       }
-
+      
     };
  
 }()
