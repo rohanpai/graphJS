@@ -72,6 +72,26 @@ var graph = function () {
         _restart();
       },
 
+      createGraphFromJson: function(json){
+        
+        _force = null;
+        _force = d3.layout.force()
+          .size([this.width, this.height])
+          .nodes(json.nodes) // initialize with a single node
+          .links(json.links)
+          .linkDistance(30)
+          .charge(-60)
+          .on("tick", _tick);
+
+        _nodes = _force.nodes();
+        _links = _force.links();
+        _node = _svg.selectAll(".node");
+        _link = _svg.selectAll(".link");
+
+        _restart();
+      
+      },
+
       createNode: function(xPos, yPos) {
         if(!xPos) xPos = this.height/2;
         if(!yPos) yPos = this.height/2;
@@ -90,4 +110,4 @@ var graph = function () {
  
 }()
 
-graph.create(300,400);
+graph.create(400 ,600);
