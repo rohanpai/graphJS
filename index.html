@@ -38,9 +38,10 @@ body{
   <script> 
 $(document).ready(function(){
   $('#json').on('input propertychange', function() {
-    graph.createGraphFromJson(this.value);
+    graph.createGraphFromJson(JSON.parse(this.value));
       //$("#yourBtnID").hide();
-      console.log(this.value);
+
+      console.log(JSON.parse(this.value));
 });
 
 });
