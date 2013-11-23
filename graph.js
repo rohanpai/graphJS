@@ -1,3 +1,8 @@
+var AdjacencyList = function() {
+
+}
+
+
 var graph = function () {
   //
   // private
@@ -9,6 +14,9 @@ var graph = function () {
   var _node = null;
   var _svg = null;
   var _fill = null;
+  var _al = {}; //Adjacency list @EXPERIMENTAL
+
+
 
   var _tick = function(){
       _link.attr("x1", function(d) { return d.source.x; })
@@ -37,6 +45,9 @@ var graph = function () {
       //
       //public
       //
+      debug: function(){
+        debugger;
+      },
 
       width: 0,
 
@@ -100,12 +111,31 @@ var graph = function () {
         _restart();
       },
 
+      generateGraph: function(){
+        var Min = 1; var Max = 20;
+        for(var i = 0; i <= 20; i++){
+          this.createNode();
+        }
+        for(i = 0; i < 10; i++){
+          graph.createEdge(Math.floor(Math.random() * Max) + Min, Math.floor(Math.random() * Max) + Min );
+        }
+      },
+
       createEdge: function(nodeSource, nodeTarget) {
         if(!nodeSource || !nodeTarget) return;
-        _links.push({source: nodeSource, target: nodeTarget});
+        _links.push({source: _nodes[nodeSource], target: _nodes[nodeTarget] });
+        if(!_al[nodeSource])
+          _al[nodeSource] = new Array;
+        _al[nodeSource].push(nodeTarget);
         _restart();
       }
+/*
+      getEdges: function(node){
+        if(!node) return;
 
+
+      },
+*/
     };
  
 }()
