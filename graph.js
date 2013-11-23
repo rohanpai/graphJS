@@ -124,18 +124,21 @@ var graph = function () {
       createEdge: function(nodeSource, nodeTarget) {
         if(!nodeSource || !nodeTarget) return;
         _links.push({source: _nodes[nodeSource], target: _nodes[nodeTarget] });
+
+        //Adjacency list
         if(!_al[nodeSource])
           _al[nodeSource] = new Array;
         _al[nodeSource].push(nodeTarget);
+
         _restart();
-      }
-/*
+      },
+
       getEdges: function(node){
         if(!node) return;
+        return _al[node]; //returns an array with all edges with this node
 
+      }
 
-      },
-*/
     };
  
 }()
