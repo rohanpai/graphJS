@@ -93,7 +93,7 @@ var graph = function () {
           .linkDistance(30)
           .charge(-60)
           .on("tick", _tick);
-
+          
         _nodes = _force.nodes();
         _links = _force.links();
         _node = _svg.selectAll(".node");
@@ -129,6 +129,7 @@ var graph = function () {
         if(!_al[nodeSource])
           _al[nodeSource] = new Array;
         _al[nodeSource].push(nodeTarget);
+        _al[nodeSource].sort;
 
         _restart();
       },
